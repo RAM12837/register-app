@@ -2,7 +2,7 @@ pipeline {
     agent { label 'Jenkins-Agent' }
     tools {
         maven 'Maven03'
-        jdk 'Java-21'
+        jdk 'Java21'
     }
     stages {
         stage ('clean workspace') {
