@@ -5,14 +5,14 @@ pipeline {
         jdk 'Java21'
     }
 
-    // environment {
-    //     APP_NAME = 'register-app-pipeline'
-    //     RELEASE = '1.0.0'
-    //     DOCKER_USER = 'Remson001'
-    //     DOCKER_PASS = 'Qwerty@1283000'
-    //     IMAGE_NAME = "${DOCKER_USER}/${APP_NAME}"
-    //     IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
-    // }
+    environment {
+        APP_NAME = 'register-app-pipeline'
+        RELEASE = '1.0.0'
+        DOCKER_USER = 'Remson001'
+        DOCKER_PASS = 'Qwerty@1283000'
+        IMAGE_NAME = "${DOCKER_USER}/${APP_NAME}"
+        IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
+    }
 
     stages {
         stage ('clean workspace') {
@@ -57,20 +57,20 @@ pipeline {
             }
         }
 
-        // stage ('Build and Push Docker Image') {
-        //     steps {
-        //         script {
-        //             docker.withRegistry('',DOCKER_PASS) {
-        //                 docker_image = docker.build "${IMAGE_NAME}:${IMAGE_TAG}"
-        //             }
+        stage ('Build and Push Docker Image') {
+            steps {
+                script {
+                    docker.withRegistry('',DOCKER_PASS) {
+                        docker_image = docker.build "${IMAGE_NAME}:${IMAGE_TAG}"
+                    }
 
-        //             docker.withregistry('',DOCKER_PASS) {
-        //                 docker_image.push("${IMAGE_TAG}")
-        //                 docker_image.push('latest')
-        //             }
-        //         }
-        //     }
-        // } 
+                    docker.withregistry('',DOCKER_PASS) {
+                        docker_image.push("${IMAGE_TAG}")
+                        docker_image.push('latest')
+                    }
+                }
+            }
+        } 
     }
     
 }
