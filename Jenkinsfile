@@ -12,6 +12,7 @@ pipeline {
         DOCKER_PASS = 'Dockerhub'
         IMAGE_NAME = "${DOCKER_USER}/${APP_NAME}"
         IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
+        JENKINS_API_TOKEN = credentials("JENKINS_API_TOKEN")
     }
 
     stages {
@@ -70,7 +71,31 @@ pipeline {
                     }
                 }
             }
+        }
+
+        stage ('trivy scan') {
+            steps {
+                script {
+                    sh ("docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image remson001/register-app-pipeline:latest --no-progress --scanners vuln --exit-code 0 --severity HIGH,CRITICAL --format table")
+                }
+            }
         } 
-    }
-    
+
+        stage ('cleanup artifacts') {
+            steps {
+                script {
+                    sh "docker rmi ${IMAGE_NAME}:${IMAGE_TAG}"
+                    sh "docker rmi ${IMAGE_NAME}:latest"
+                }
+            }
+        }
+
+        stage ('trigger CD pipeline') {
+            steps {
+                script {
+                    sh "curl -v -k --user ramkumar:${JENKINS_API_TOKEN} -X POST -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' --data 'IMAGE_TAG=${IMAGE_TAG}' 'ec2-13-126-83-203.ap-south-1.compute.amazonaws.com:8080/job/gitops-register-app-cd/buildWithParameters?token=gitops-token'"
+                }
+            }
+        }
+    }  
 }
