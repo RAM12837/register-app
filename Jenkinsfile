@@ -49,13 +49,13 @@ pipeline {
             }
         }
 
-        // stage ('Quality Gate') {
-        //     steps {
-        //         script {
-        //             waitForQualityGate(credentialsId: 'Jenkins-Sonarqube-token')
-        //         }
-        //     }
-        // }
+        stage ('Quality Gate') {
+            steps {
+                script {
+                    waitForQualityGate(credentialsId: 'Jenkins-Sonarqube-token')
+                }
+            }
+        }
 
         // stage ('Build and Push Docker Image') {
         //     steps {
