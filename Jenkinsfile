@@ -109,12 +109,12 @@ pipeline {
             }
         }
 
-        // stage ('trigger CD pipeline') {
-        //     steps {
-        //         script {
-        //             sh "curl -v -k --user ramkumar:${JENKINS_API_TOKEN} -X POST -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' --data 'IMAGE_TAG=${IMAGE_TAG}' 'ec2-13-126-83-203.ap-south-1.compute.amazonaws.com:8080/job/gitops-register-app-cd/buildWithParameters?token=gitops-token'"
-        //         }
-        //     }
-        // }
+        stage ('trigger CD pipeline') {
+            steps {
+                script {
+                    sh "curl -v -k --user ramkumar:${JENKINS_API_TOKEN} -X POST -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' --data 'IMAGE_TAG=${IMAGE_TAG}' 'ec2-13-126-83-203.ap-south-1.compute.amazonaws.com:8080/job/gitops-register-app-cd/buildWithParameters?token=gitops-token'"
+                }
+            }
+        }
     }  
 }
