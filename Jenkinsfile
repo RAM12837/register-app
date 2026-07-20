@@ -110,16 +110,14 @@ pipeline {
 
         stage ('trigger CD pipeline') {
             steps {
-                script {
-                    build job: 'gitops-register-app-cd',
-                    wait: false,
-                    parameters: [
-                        string(
-                            name: 'IMAGE_TAG',
-                            value: "${IMAGE_TAG}"
-                        )
-                    ]
-                }
+                build job: 'gitops-register-app-cd',
+                wait: false,
+                parameters: [
+                    string(
+                        name: 'IMAGE_TAG',
+                        value: "${IMAGE_TAG}"
+                    )
+                ]
             }
         }
     }  
