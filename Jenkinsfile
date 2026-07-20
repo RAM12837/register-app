@@ -12,7 +12,6 @@ pipeline {
         DOCKER_PASS = 'Dockerhub'
         IMAGE_NAME = "${DOCKER_USER}/${APP_NAME}"
         IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
-        JENKINS_API_TOKEN = credentials("JENKINS_API_TOKEN")
     }
 
     stages {
@@ -73,7 +72,7 @@ pipeline {
                     docker run --rm \
                     -v /var/run/docker.sock:/var/run/docker.sock \
                     aquasec/trivy image \
-                    remson001/register-app-pipeline:latest \
+                    ${IMAGE_NAME}:${IMAGE_TAG} \
                     --no-progress \
                     --scanners vuln \
                     --exit-code 0 \
@@ -112,7 +111,14 @@ pipeline {
         stage ('trigger CD pipeline') {
             steps {
                 script {
-                    sh "curl -v -k --user ramkumar:${JENKINS_API_TOKEN} -X POST -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' --data 'IMAGE_TAG=${IMAGE_TAG}' 'ec2-13-126-83-203.ap-south-1.compute.amazonaws.com:8080/job/gitops-register-app-cd/buildWithParameters?token=gitops-token'"
+                    build job: 'gitops-register-app-cd',
+                    wait: false,
+                    parameters: [
+                        string(
+                            name: 'IMAGE_TAG',
+                            value: "${IMAGE_TAG}"
+                        )
+                    ]
                 }
             }
         }
