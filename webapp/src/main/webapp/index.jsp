@@ -1,38 +1,103 @@
-<form action="action_page.php">
-  <div class="container">
-    <h1>New user Register for DevOps Learning at Virtual TechBox Youtube Channel</h1>
-    <p>Please fill in this form to create an account.</p>
-    <hr>
-     
-    <label for="Name"><b>Enter Name</b></label>
-    <input type="text" placeholder="Enter Full Name" name="Name" id="Name" required>
-    <br>
-    
-    <label for="mobile"><b>Enter mobile</b></label>
-    <input type="text" placeholder="Enter moible number" name="mobile" id="mobile" required>
-    <br>
+<%@ page contentType="text/html; charset=UTF-8" %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Register for the DevOps learning community.">
+  <title>Join the DevOps Learning Community</title>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/styles.css">
+</head>
+<body>
+  <main class="page-shell">
+    <section class="intro-panel" aria-labelledby="intro-title">
+      <p class="eyebrow">VIRTUAL TECHBOX</p>
+      <h1 id="intro-title">Build better. Learn together.</h1>
+      <p class="intro-copy">Join a practical DevOps learning community focused on automation, cloud delivery, and real project experience.</p>
+      <ul class="benefit-list">
+        <li><span class="benefit-icon">01</span><span>Learn CI/CD through hands-on projects</span></li>
+        <li><span class="benefit-icon">02</span><span>Explore Kubernetes, GitOps, and AWS</span></li>
+        <li><span class="benefit-icon">03</span><span>Grow with a community of builders</span></li>
+      </ul>
+    </section>
 
-    <label for="email"><b>Enter Email</b></label>
-    <input type="text" placeholder="Enter Email" name="email" id="email" required>
-    <br>
+    <section class="form-panel" aria-labelledby="form-title">
+      <div class="form-heading">
+        <p class="eyebrow">CREATE YOUR ACCOUNT</p>
+        <h2 id="form-title">Start learning today</h2>
+        <p>Complete the form below to register your interest.</p>
+      </div>
 
-    <label for="psw"><b>Password</b></label>
-    <input type="password" placeholder="Enter Password" name="psw" id="psw" required>
-    <br>
+      <form id="registration-form" action="#" method="post" novalidate>
+        <div class="field-row">
+          <div class="field-group">
+            <label for="full-name">Full name</label>
+            <input type="text" id="full-name" name="fullName" placeholder="Ram Kumar" autocomplete="name" required>
+          </div>
+          <div class="field-group">
+            <label for="mobile">Mobile number</label>
+            <input type="tel" id="mobile" name="mobile" placeholder="+91 98765 43210" autocomplete="tel" required>
+          </div>
+        </div>
 
-    <label for="psw-repeat"><b>Repeat Password</b></label>
-    <input type="password" placeholder="Repeat Password" name="psw-repeat" id="psw-repeat" required>
-    <hr>
-    <br>
-    <p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
-    <button type="submit" class="registerbtn">Register</button>
-  </div>
-  <div class="container signin">
-    <p>Already have an account? <a href="#">Sign in</a>.</p>
-  </div>
+        <div class="field-group">
+          <label for="email">Email address</label>
+          <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" required>
+        </div>
 
-   <h1> Thank You </h1>
-   <br>
-   <h1> Happy Learning. See You Again with Ramkumar with Github Webhook trigger. </h1>
-   
-</form>
+        <div class="field-row">
+          <div class="field-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="At least 8 characters" autocomplete="new-password" minlength="8" required>
+          </div>
+          <div class="field-group">
+            <label for="password-confirmation">Confirm password</label>
+            <input type="password" id="password-confirmation" name="passwordConfirmation" placeholder="Repeat your password" autocomplete="new-password" minlength="8" required>
+          </div>
+        </div>
+
+        <label class="consent-row" for="terms">
+          <input type="checkbox" id="terms" name="terms" required>
+          <span>I agree to the <a href="#terms">Terms &amp; Privacy</a>.</span>
+        </label>
+
+        <p class="form-message" id="form-message" role="status" aria-live="polite"></p>
+        <button class="register-button" type="submit">Create account <span aria-hidden="true">&#8594;</span></button>
+      </form>
+
+      <p class="signin-note">Already registered? <a href="#signin">Sign in</a></p>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      var form = document.getElementById('registration-form');
+      var password = document.getElementById('password');
+      var confirmation = document.getElementById('password-confirmation');
+      var message = document.getElementById('form-message');
+
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        message.className = 'form-message';
+
+        if (!form.checkValidity()) {
+          message.textContent = 'Please complete all required fields.';
+          message.classList.add('error-message');
+          form.reportValidity();
+          return;
+        }
+
+        if (password.value !== confirmation.value) {
+          message.textContent = 'Passwords do not match. Please try again.';
+          message.classList.add('error-message');
+          confirmation.focus();
+          return;
+        }
+
+        message.textContent = 'Your registration details are ready to be submitted.';
+        message.classList.add('success-message');
+      });
+    }());
+  </script>
+</body>
+</html>
